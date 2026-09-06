@@ -1,0 +1,35 @@
+model_id: param-1-2.9b
+rank_by_bharat_score: 15
+hf_checkpoint: bharatgenai/Param-1-2.9B-Instruct
+revision: f9b32a727458727ff515fea5d82df00ae9b7ad56
+serving_backend: hf
+apply_chat_template: true
+device: cuda:1
+trust_remote_code: true
+use_cache: false
+dtype: bfloat16
+quantization: none
+batch_size: 8
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 128
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  Custom ParamBharatGenForCausalLM architecture. use_cache=False is required, not
+  optional: this repo's modeling_parambharatgen.py:658 unconditionally indexes
+  past_key_values[0][0] whenever past_key_values is not None - written for an older
+  transformers where generate() left it as bare None before the first call; current
+  transformers instead seeds an empty Cache object, so that check now passes on the very
+  first forward pass and indexing an empty cache's first layer raises AttributeError. A
+  modeling-file patch to guard that line was tried and reverted: it produced a WORSE
+  failure (a raw CUDA device-side assert), which is a risk of silently wrong generation,
+  not just a crash - unacceptable for a benchmark eval. use_cache=False sidesteps the
+  incompatibility entirely at the cost of slower generation (full reattention every step).
+  max_tokens capped 512->128 because no-cache generation cost is O(max_tokens^2)
+  regardless of batch size, and real answers complete in 35-173 tokens on manual
+  inspection - well under either budget. Revision pinned 2026-08-28 (security review):
+  trust_remote_code=True executes this repo's own Python, so an unpinned "main" would
+  silently re-execute whatever the maintainer pushes next; the pinned commit is exactly
+  what "main" resolved to at pinning time.

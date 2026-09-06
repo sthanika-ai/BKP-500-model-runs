@@ -1,0 +1,19 @@
+model_id: gemma3-4b
+rank_by_bharat_score: 13
+hf_checkpoint: unsloth/gemma-3-4b-it
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: hf
+apply_chat_template: true
+device: cuda:1
+dtype: bfloat16
+quantization: none
+batch_size: 48
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  No per-model engineering note was recorded beyond backend/device/batch_size - it ran
+  without needing a workaround. Not commit-pinned.

@@ -1,0 +1,33 @@
+# Pinned runtime dependencies for scripts/run_eval.py's local-inference backends (hf, vllm,
+# ollama-via-openai-client) — install these into the harness checkout (pip install -e ".[dev]"
+# from pyproject.toml covers only jsonschema + dev tooling, not model-serving packages).
+#
+#   python3.12 -m venv .venv-vllm
+#   source .venv-vllm/bin/activate
+#   pip install -r requirements.txt
+#
+# Versions below are the exact ones this project's full run used (`pip freeze` from the venv
+# that produced every result in BKP-500-model-runs). `vllm==0.15.0` pulls in a matching
+# `torch==2.9.1+cu128` automatically — no separate --extra-index-url is needed.
+#
+# Hardware this was run and tested on: 2x NVIDIA A100 80GB (driver 580.178.04, CUDA 12.8).
+# gpu_memory_utilization in configs/models/*.yaml is a fraction of a GPU's TOTAL VRAM, not of
+# model size — expect different real memory budgets, and possibly OOM, on a smaller GPU.
+#
+# Two known caveats, documented in full in BKP-500-model-runs/configs/README.md:
+#   1. sarvam-m / sarvam-30b additionally need scripts/vllm_infra/hotpatch_vllm.py run against
+#      this vllm install before those two configs will even start.
+#   2. This file pins what the LATER corrective rerun used. The ORIGINAL full run's exact
+#      package versions were never separately pinned/recorded and may differ.
+
+vllm==0.15.0
+torch==2.9.1
+transformers==4.57.6
+accelerate==1.15.0
+bitsandbytes==0.50.2
+tokenizers==0.22.2
+safetensors==0.8.0
+numpy==2.2.6
+huggingface_hub==0.36.2
+openai==3.14.1
+jsonschema==4.26.0

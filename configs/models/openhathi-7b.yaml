@@ -1,0 +1,37 @@
+model_id: openhathi-7b
+rank_by_bharat_score: 17
+hf_checkpoint: sarvamai/OpenHathi-7B-Hi-v0.1-Base
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: vllm
+apply_chat_template: false
+base_url: http://localhost:8106/v1
+served_model_name: openhathi-7b
+dtype: auto
+quantization: none
+batch_size: auto
+max_workers: 128
+vllm_launch:
+  port: 8106
+  gpu_memory_utilization: 0.85
+  max_model_len: 4096
+  extra_args:
+    - "--chat-template"
+    - "<repo>/scripts/vllm_infra/plain_concat_template.jinja"
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  apply_chat_template: false is CONFIRMED - this repo (a Base, not instruct, checkpoint
+  per its own "-Base" suffix) ships no real chat_template. Unlike HFTransformersAdapter,
+  vLLM's OpenAI-compatible server 400s outright with no chat_template configured, so this
+  config supplies a custom Jinja template (plain_concat_template.jinja) that does plain
+  text concatenation, not real chat formatting - it exists purely to satisfy vLLM's
+  server-side requirement for *some* template, restoring continuous batching without
+  pretending this is a chat model. max_model_len=4096, not 8192 like most other vLLM
+  configs here - that value is correct and was kept across an earlier revert.
+  max_workers=128 calibrated via a smoke ramp (32->64->128->256, --limit 200): all clean
+  (KV-cache stayed under 22%, Waiting=0 throughout) with diminishing returns past 128
+  (29.3s->19.7s->16.8s->14.5s).

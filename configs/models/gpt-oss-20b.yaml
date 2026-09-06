@@ -1,0 +1,27 @@
+model_id: gpt-oss-20b
+rank_by_bharat_score: 2
+hf_checkpoint: openai/gpt-oss-20b
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: vllm
+apply_chat_template: true
+base_url: http://localhost:8109/v1
+served_model_name: gpt-oss-20b
+dtype: auto
+quantization: mxfp4 (native, auto-detected)
+batch_size: auto
+max_workers: 16
+vllm_launch:
+  port: 8109
+  gpu_memory_utilization: 0.85
+  max_model_len: 8192
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 2048
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  Native MXFP4 quantization - vLLM auto-detects it from config.json, no extra
+  --quantization flag needed. max_tokens=2048: a reasoning model, same lesson as
+  qwen3.6-27b/sarvam-m - needs real headroom past its chain-of-thought before it ever
+  reaches an answer. Not commit-pinned.
