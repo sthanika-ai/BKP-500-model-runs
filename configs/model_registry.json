@@ -1,0 +1,189 @@
+{
+  "$schema_note": "Derived from configs/run_eval.py's MODELS dict at the commit this repo was published from. Every field here maps 1:1 onto the keyword arguments run_eval.py passed to build each model's adapter - see that file for the full engineering rationale (batch sizing, quantization choices, per-model workarounds) behind each value.",
+  "n_completed": 21,
+  "n_attempted": 22,
+  "models": {
+    "qwen3.6-27b": {
+      "backend": "ollama",
+      "base_url": "http://localhost:11434/v1",
+      "served_model_name": "qwen3.6:27b",
+      "max_tokens": 4096,
+      "max_workers": 4,
+      "status": "completed"
+    },
+    "gpt-oss-20b": {
+      "backend": "vllm",
+      "hf_repo": "openai/gpt-oss-20b",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "max_workers": 16,
+      "max_tokens": 2048,
+      "quantization": "native MXFP4 (auto-detected by vLLM)",
+      "status": "completed"
+    },
+    "sarvam-m": {
+      "backend": "vllm",
+      "hf_repo": "sarvamai/sarvam-m",
+      "revision": "01534a53c46f2788e392dbb3d994e0fa8f04d3fd",
+      "vllm_gpu_util": 0.8,
+      "vllm_max_len": 8192,
+      "max_workers": 32,
+      "max_tokens": 4096,
+      "status": "completed"
+    },
+    "gemma3-27b": {
+      "backend": "hf",
+      "hf_repo": "unsloth/gemma-3-27b-it",
+      "batch_size": 8,
+      "status": "completed"
+    },
+    "qwen3-vl-8b": {
+      "backend": "vllm",
+      "hf_repo": "Qwen/Qwen3-VL-8B-Instruct",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "max_workers": 16,
+      "status": "completed"
+    },
+    "mistral-small-3.1-24b": {
+      "backend": "vllm",
+      "hf_repo": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "max_workers": 16,
+      "status": "completed"
+    },
+    "krutrim-2-12b": {
+      "backend": "hf",
+      "hf_repo": "Krutrim-AI-Labs/Krutrim-2-instruct",
+      "batch_size": 8,
+      "status": "completed"
+    },
+    "phi-4-14b": {
+      "backend": "vllm",
+      "hf_repo": "microsoft/phi-4",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "max_workers": 16,
+      "status": "completed"
+    },
+    "sarvam-30b": {
+      "backend": "vllm",
+      "hf_repo": "sarvamai/sarvam-30b",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "vllm_extra_args": ["--trust-remote-code"],
+      "max_workers": 128,
+      "max_tokens": 4096,
+      "note": "requires the vendor's own vLLM hotpatch (scripts/vllm_infra/hotpatch_vllm.py in the eval harness repo) - native vLLM support is still an open upstream PR",
+      "status": "completed"
+    },
+    "gemma3-12b": {
+      "backend": "hf",
+      "hf_repo": "unsloth/gemma-3-12b-it",
+      "batch_size": 8,
+      "status": "completed"
+    },
+    "llama3.1-8b-instruct": {
+      "backend": "hf",
+      "hf_repo": "NousResearch/Meta-Llama-3.1-8B-Instruct",
+      "batch_size": 16,
+      "status": "completed"
+    },
+    "qwen2.5-7b": {
+      "backend": "vllm",
+      "hf_repo": "Qwen/Qwen2.5-7B-Instruct",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "max_workers": 16,
+      "status": "completed"
+    },
+    "gemma3-4b": {
+      "backend": "hf",
+      "hf_repo": "unsloth/gemma-3-4b-it",
+      "batch_size": 48,
+      "status": "completed"
+    },
+    "navarasa-2.0-7b": {
+      "backend": "vllm",
+      "hf_repo": "Telugu-LLM-Labs/Indic-gemma-7b-finetuned-sft-Navarasa-2.0",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "max_workers": 64,
+      "raw_completions": true,
+      "status": "completed"
+    },
+    "krutrim-1-7b": {
+      "backend": "hf",
+      "hf_repo": "Krutrim-AI-Labs/krutrim-1-instruct",
+      "revision": "ef1e55353589e1b53f3c79b9526666ac8901df11",
+      "trust_remote_code": true,
+      "batch_size": 16,
+      "max_tokens": 128,
+      "status": "completed"
+    },
+    "param-1-2.9b": {
+      "backend": "hf",
+      "hf_repo": "bharatgenai/Param-1-2.9B-Instruct",
+      "revision": "f9b32a727458727ff515fea5d82df00ae9b7ad56",
+      "trust_remote_code": true,
+      "batch_size": 8,
+      "max_tokens": 128,
+      "use_cache": false,
+      "status": "completed"
+    },
+    "sarvam-1": {
+      "backend": "hf",
+      "hf_repo": "sarvamai/sarvam-1",
+      "batch_size": 32,
+      "status": "completed"
+    },
+    "openhathi-7b": {
+      "backend": "vllm",
+      "hf_repo": "sarvamai/OpenHathi-7B-Hi-v0.1-Base",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 4096,
+      "max_workers": 128,
+      "vllm_extra_args": ["--chat-template", "plain_concat_template.jinja"],
+      "status": "completed"
+    },
+    "airavata-7b": {
+      "backend": "hf",
+      "hf_repo": "maitreyaz/Airavata-8bit",
+      "prequantized": true,
+      "batch_size": 32,
+      "note": "ungated bnb-8bit mirror of ai4bharat/Airavata, which is gated upstream",
+      "status": "completed"
+    },
+    "param-1-7b": {
+      "backend": "hf",
+      "hf_repo": "bharatgenai/Param-1-7B",
+      "revision": "e50c644204ae369594cd7ad84305eb505a1da1c3",
+      "trust_remote_code": true,
+      "batch_size": 16,
+      "max_tokens": 32,
+      "note": "base (non-instruction-tuned) checkpoint - low score reflects that, not a harness bug",
+      "status": "completed"
+    },
+    "gemma3-12b-int4": {
+      "backend": "vllm",
+      "hf_repo": "unsloth/gemma-3-12b-it-qat-int4-bnb-4bit",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "max_workers": 128,
+      "vllm_extra_args": ["--quantization", "bitsandbytes"],
+      "note": "ungated mirror of google/gemma-3-12b-it-qat-int4-unquantized, which is gated upstream",
+      "status": "completed"
+    },
+    "llama4-scout": {
+      "backend": "vllm",
+      "hf_repo": "unsloth/Llama-4-Scout-17B-16E-Instruct-unsloth-bnb-4bit",
+      "vllm_gpu_util": 0.85,
+      "vllm_max_len": 8192,
+      "max_workers": 8,
+      "vllm_extra_args": ["--quantization", "bitsandbytes"],
+      "status": "attempted_not_completed",
+      "note": "vLLM server process failed to become ready during the run - excluded from the leaderboard, not included in results/"
+    }
+  }
+}
