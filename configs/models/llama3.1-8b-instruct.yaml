@@ -1,0 +1,20 @@
+model_id: llama3.1-8b-instruct
+rank_by_bharat_score: 11
+hf_checkpoint: NousResearch/Meta-Llama-3.1-8B-Instruct
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: hf
+apply_chat_template: true
+device: cuda:0
+dtype: bfloat16
+quantization: none
+batch_size: 16
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  Smallest model in this roster (~16.5GB weights) with the most free VRAM headroom of any
+  model in the run - affords a bigger batch_size than gemma3-27b/sarvam-m/ sarvam-30b. Not
+  commit-pinned: this config tracks NousResearch's default branch.

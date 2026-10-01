@@ -1,0 +1,22 @@
+model_id: sarvam-1
+rank_by_bharat_score: 16
+hf_checkpoint: sarvamai/sarvam-1
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: hf
+apply_chat_template: true
+device: cuda:1
+dtype: bfloat16
+quantization: none
+batch_size: 32
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  No per-model engineering note was recorded for this one in run_eval.py beyond
+  backend/device/batch_size - it ran without needing a workaround. apply_chat_template
+  here reflects hf_adapter.py's own runtime auto-detection (uses the tokenizer's
+  chat_template if one exists, else falls back to plain concatenation) rather than a
+  setting explicitly confirmed for this specific repo. Not commit-pinned.

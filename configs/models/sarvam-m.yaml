@@ -1,0 +1,36 @@
+model_id: sarvam-m
+rank_by_bharat_score: 3
+hf_checkpoint: sarvamai/sarvam-m
+revision: 01534a53c46f2788e392dbb3d994e0fa8f04d3fd
+serving_backend: vllm
+apply_chat_template: true
+base_url: http://localhost:8103/v1
+served_model_name: sarvam-m
+dtype: auto
+quantization: none
+batch_size: auto
+max_workers: 32
+vllm_launch:
+  port: 8103
+  gpu_memory_utilization: 0.8
+  max_model_len: 8192
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 4096
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  Plain MistralForCausalLM - no custom code, natively supported by vLLM. Switched from an
+  hf backend after confirming HF's forced sequential batch_size=1 path (a consequence of
+  this model's hybrid think/no-think generation - see sarvam-30b's notes for why) couldn't
+  finish even a 30-item smoke within an hour; vLLM's continuous batching has no such
+  penalty, since each sequence finishes independently regardless of thinking-mode's
+  variable output length. max_tokens=4096, not this project's own MILU-benchmark
+  investigation config's 1536 - that is a different, easier task; BKP-500's harder items
+  empirically needed the full 4096 to avoid truncating mid-reasoning.
+  gpu_memory_utilization=0.8 and max_workers=32 were raised together after observing
+  Running=16/Waiting=0 with only ~50-57% GPU KV-cache used at max_workers=16 - real
+  headroom to run more concurrent sequences. Revision pinned 2026-08-27; confirmed this is
+  exactly what "main" already resolved to when first downloaded, so the pin is
+  documentation, not a behavior change.

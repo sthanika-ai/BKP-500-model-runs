@@ -1,0 +1,33 @@
+model_id: airavata-7b
+rank_by_bharat_score: 18
+hf_checkpoint: maitreyaz/Airavata-8bit
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: hf
+apply_chat_template: false
+device: cuda:0
+prequantized: true
+dtype: n/a (prequantized bnb-8bit checkpoint, loaded as saved)
+quantization: bitsandbytes (8-bit, prequantized)
+batch_size: 32
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  apply_chat_template: false is CONFIRMED, not assumed - hf_adapter.py's runtime check
+  (getattr(tokenizer, "chat_template", None)) finds none on this repo, so every prompt
+  falls back to plain "{system}\n\n{prompt}" concatenation, which is also what this
+  model's own card documents as the expected prompt shape. Ungated bnb-8bit mirror of the
+  gated ai4bharat/Airavata - identical base weights, just quantized. A vLLM backend was
+  tried and reverted: vLLM's bitsandbytes loader produced degenerate output (1 token,
+  decodes to empty string) on many prompts that HF's own bnb loading path for the exact
+  same raw text answered correctly - confirmed via direct /v1/completions calls bypassing
+  the chat template entirely. This looks like a genuine dequantization/precision
+  discrepancy specific to vLLM's bnb loader for this checkpoint, not a template or
+  prompt-format issue. HF is the only currently-reliable backend for this model.
+  batch_size=32 chosen because HF's lock-step generate() means the whole batch waits on
+  its slowest sequence each step - batch_size 16->96 (6x) only bought ~18% more
+  throughput, so 32 captures most of the achievable gain without the ~96 batch's near-OOM
+  memory margin.

@@ -1,0 +1,25 @@
+model_id: qwen3.6-27b
+rank_by_bharat_score: 1
+hf_checkpoint: qwen3.6:27b (Ollama tag, not an HF repo)
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: ollama
+apply_chat_template: true
+base_url: http://localhost:11434/v1
+served_model_name: "qwen3.6:27b"
+dtype: n/a (served via Ollama; quantization/dtype set by the Ollama model image, not controlled here)
+quantization: n/a (Ollama-managed)
+batch_size: auto  # server-side continuous batching, no client batch dimension
+max_workers: 4
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 4096
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  Reasoning model - its chain-of-thought alone runs 500+ tokens on anything non-trivial
+  (confirmed empirically: a 512-token budget was exhausted mid-reasoning with zero answer
+  content emitted), hence max_tokens=4096. max_workers=4 matches the Ollama service's own
+  OLLAMA_NUM_PARALLEL=4 systemd setting - going higher just queues client-side with no
+  server-side benefit. No HF revision applies: served via Ollama's own model registry, not
+  a pinned Hugging Face checkpoint.

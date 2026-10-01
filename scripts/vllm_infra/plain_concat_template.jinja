@@ -1,0 +1,13 @@
+{#- Minimal chat template for base/instruction-tuned models that ship no chat_template of their
+    own (confirmed: airavata-7b, openhathi-7b, navarasa-2.0-7b). vLLM's OpenAI server hard-requires
+    a template and 400s without one - this replicates HFTransformersAdapter's own fallback exactly
+    (system + "\n\n" + user prompt, plain text, no special tokens) so behavior is identical between
+    the HF and vLLM backends for these models. -#}
+{%- for message in messages -%}
+    {%- if message['role'] == 'system' -%}
+        {{ message['content'] }}
+
+    {%- elif message['role'] == 'user' -%}
+        {{ message['content'] }}
+    {%- endif -%}
+{%- endfor -%}

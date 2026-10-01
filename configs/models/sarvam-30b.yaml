@@ -1,0 +1,37 @@
+model_id: sarvam-30b
+rank_by_bharat_score: 9
+hf_checkpoint: sarvamai/sarvam-30b
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: vllm
+apply_chat_template: true
+base_url: http://localhost:8115/v1
+served_model_name: sarvam-30b
+trust_remote_code: true
+dtype: auto
+quantization: none
+batch_size: auto
+max_workers: 128
+vllm_launch:
+  port: 8115
+  gpu_memory_utilization: 0.85
+  max_model_len: 8192
+  extra_args:
+    - "--trust-remote-code"
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 4096
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  REQUIRES scripts/vllm_infra/hotpatch_vllm.py applied to the vLLM install before this
+  config will load at all: native vLLM support for this custom
+  SarvamMoEForCausalLM/SarvamMLAForCausalLM architecture is still an open upstream vLLM
+  PR, and the hotpatch registers both classes and installs the repo's own custom modeling
+  code. Switched from an hf backend for the same payoff as sarvam-m: HF's sequential
+  batch_size=1 path, forced by this model's thinking-mode batch-penalty problem, was too
+  slow even for a 30-item smoke. Concurrency calibrated via live testing: 32->64->128
+  scaled cleanly (899.7 -> 1829.3 -> 4018.8 tok/s, KV-cache 3.4% -> 7.3% -> 16.4%); 256
+  looked promising at first (~5100 tok/s) but KV cache climbed to 100% at steady state,
+  causing real backpressure (Waiting>0) - unsafe for a long unattended run. Settled on
+  128, the last value with clean headroom. Not commit-pinned.

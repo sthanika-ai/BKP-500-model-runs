@@ -1,0 +1,32 @@
+model_id: gemma3-12b-int4
+rank_by_bharat_score: 19
+hf_checkpoint: unsloth/gemma-3-12b-it-qat-int4-bnb-4bit
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: vllm
+apply_chat_template: true
+base_url: http://localhost:8108/v1
+served_model_name: gemma3-12b-int4
+dtype: auto
+quantization: bitsandbytes (int4, QAT)
+batch_size: auto
+max_workers: 128
+vllm_launch:
+  port: 8108
+  gpu_memory_utilization: 0.85
+  max_model_len: 8192
+  extra_args:
+    - "--quantization"
+    - "bitsandbytes"
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  Ungated mirror of the gated google/gemma-3-12b-it-qat-int4-unquantized. max_workers=128
+  calibrated via a smoke ramp (32->64->128->256, --limit 200): all clean (KV-cache under
+  5%, Waiting=0 throughout - this quantized 12B has plenty of headroom), but wall time
+  showed sharply diminishing returns past 128 (49.9s->36.1s->30.0s->26.8s for
+  32/64/128/256) - the last doubling only bought ~11%, likely client-side overhead rather
+  than real server capacity by that point.

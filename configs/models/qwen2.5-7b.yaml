@@ -1,0 +1,25 @@
+model_id: qwen2.5-7b
+rank_by_bharat_score: 12
+hf_checkpoint: Qwen/Qwen2.5-7B-Instruct
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: vllm
+apply_chat_template: true
+base_url: http://localhost:8111/v1
+served_model_name: qwen2.5-7b
+dtype: auto
+quantization: none
+batch_size: auto
+max_workers: 16
+vllm_launch:
+  port: 8111
+  gpu_memory_utilization: 0.85
+  max_model_len: 8192
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  No per-model engineering note was recorded beyond the standard vLLM launch fields - it
+  ran without needing a workaround. Not commit-pinned.

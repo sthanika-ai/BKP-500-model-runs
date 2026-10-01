@@ -1,0 +1,37 @@
+model_id: navarasa-2.0-7b
+rank_by_bharat_score: 14
+hf_checkpoint: Telugu-LLM-Labs/Indic-gemma-7b-finetuned-sft-Navarasa-2.0
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: vllm
+apply_chat_template: false
+base_url: http://localhost:8107/v1
+served_model_name: navarasa-2.0-7b
+raw_completions: true
+dtype: auto
+quantization: none
+batch_size: auto
+max_workers: 64
+vllm_launch:
+  port: 8107
+  gpu_memory_utilization: 0.85
+  max_model_len: 8192
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  apply_chat_template: false is CONFIRMED, and for an unusual reason: this repo genuinely
+  has no chat_template (an early "100% refusal" result was actually every row 400ing on
+  that, mis-bucketed by the grader as a refusal, not a real model behavior). Adding a
+  --chat-template fixed the 400 but exposed a second, deeper bug: vLLM's chat-rendering
+  pipeline returned an empty 1-token response for this Gemma-family model even with a
+  syntactically correct template - confirmed because the identical text sent raw via
+  /v1/completions instead of /v1/chat/completions answered correctly. Worked around with
+  raw_completions=True (see LocalAPIAdapter), which bypasses vLLM's chat renderer entirely
+  and sends the same plain text HF's own no-template fallback would - no --chat-template
+  needed on the server at all in this mode. max_workers=64: a smoke ramp (32/64/128,
+  --limit 200) came back flat (13.0s/12.1s/12.5s) - this model's short generations make
+  client-side overhead dominate well before server capacity, so 64 was chosen for headroom
+  with no measured benefit above it.

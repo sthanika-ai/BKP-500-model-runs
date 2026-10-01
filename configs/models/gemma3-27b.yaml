@@ -1,0 +1,22 @@
+model_id: gemma3-27b
+rank_by_bharat_score: 4
+hf_checkpoint: unsloth/gemma-3-27b-it
+revision: null  # not commit-pinned - tracks the repo's mutable default branch
+serving_backend: hf
+apply_chat_template: true
+device: cuda:1
+dtype: bfloat16
+quantization: none
+batch_size: 8
+generation_config:
+  temperature: 0.0
+  max_gen_toks: 512
+mode: full
+regimes: [R1, R2]
+n_samples: 3
+notes: >
+  ~54GB bf16 weights, so KV-cache budget is smaller than llama3.1-8b's - batch_size=8 real
+  simultaneously-decoded sequences per generate() call, not 8 queued threads. No thinking
+  mode exists for Gemma 3 (verified: no enable_thinking key in its chat template, no
+  mention in its model card) - runs as a plain instruct model. Ungated mirror used because
+  google/gemma-3-27b-it itself is gated; weights are identical.
