@@ -1,22 +1,12 @@
 cff-version: 1.2.0
-message: "If you use this leaderboard or these model configurations, please cite as below."
-title: "BKP-500 Model Runs: leaderboard and run configuration for the Bharat Knowledge Probe benchmark"
-abstract: >-
-  The full leaderboard and the exact run configuration (backend, HF revision pins, decoding
-  settings) for 19 language models evaluated on BKP-500 — a benchmark measuring whether models
-  know India-specific locale conventions.
+message: "If you use this leaderboard or these run configurations, please cite it as below."
+title: "BKP Benchmark: Model Configs and Leaderboard"
+type: dataset
 authors:
-  - name: "Sthanika AI"
-date-released: 2026-09-17
-version: 0.1.0
-license: Apache-2.0
+  - name: "Sthānika AI"
+    url: "https://sthanika.ai"
 repository-code: "https://github.com/sthanika-ai/BKP-500-model-runs"
-url: "https://github.com/sthanika-ai/Bharat-Knowledge-Probe-Benchmark"
-keywords:
-  - large language models
-  - benchmark
-  - evaluation
-  - india
-  - locale
-  - leaderboard
-  - reproducibility
+url: "https://sthanika.ai/research/bkp500-2026"
+abstract: "Run configuration and the full leaderboard for the 19 models evaluated on BKP-500 (Bharat Knowledge Probe)."
+license: Apache-2.0
+date-released: 2026-10-01
